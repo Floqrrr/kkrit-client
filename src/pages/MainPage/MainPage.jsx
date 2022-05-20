@@ -25,7 +25,7 @@ function ImageGallery() {
   const getPost = useCallback(async () => {
     try {
       await axios
-        .get(`/api/post/get_post/${page * 8}`, {
+        .get(`/api/post/get_post/${page * 20}`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -48,7 +48,7 @@ function ImageGallery() {
       dataLength={post?.length} //This is important field to render the next data
       next={() => setPage(page + 1)}
       hasMore={true}
-      loader={<h4>Loading...</h4>}
+      loader={<h4></h4>}
       endMessage={
         <p style={{ textAlign: "center" }}>
           <b>Yay! You have seen it all</b>
@@ -64,8 +64,7 @@ function ImageGallery() {
           columnSpacing={1}
           sx={{ justifyContent: "center" }}
         >
-          {post
-            .map((item) => (
+          {post?.map((item) => (
               <MainCard key={item.id} todo={item} />
             ))}
           {/* <InfiniteScroll data={post} drawElement={renderChild} size={5}></InfiniteScroll> */}

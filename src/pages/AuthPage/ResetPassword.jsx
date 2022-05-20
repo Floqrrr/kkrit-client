@@ -52,6 +52,9 @@ const ResetPassword = () => {
 
   const resetPass = async () => {
     try {
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
       await axios.post(
         "/api/auth/reset_pass",
         { ...form },
@@ -61,7 +64,6 @@ const ResetPassword = () => {
           },
         }
       );
-      window.location.assign("http://localhost:3000/");
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +120,9 @@ const ResetPassword = () => {
   const resetHandler = async () => {
 
     try {
+      setTimeout(() => {
+        window.location.href = '/auth';
+      }, 2000);
       await axios.put(
         "/api/auth/resetPass",
         { ...form },
@@ -127,7 +132,7 @@ const ResetPassword = () => {
           },
         }
       );
-      window.location.assign("http://localhost:3000/auth");
+  
     } catch (error) {
       console.log(error);
     }

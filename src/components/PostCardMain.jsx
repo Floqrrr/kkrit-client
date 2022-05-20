@@ -138,6 +138,9 @@ const MainCard = ({ todo }) => {
   });
 
   const createActivity = async () => {
+    if (userId === null) {
+      return;
+    } else
     try {
       axios.put(
         "/api/activity/update_activity",
@@ -154,19 +157,22 @@ const MainCard = ({ todo }) => {
   };
 
   const createWatch = async () => {
-    try {
-      axios.post(
-        "/api/activity/create_activity",
-        { ...form },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
+    if (userId === null) {
+      return;
+    } else
+      try {
+        axios.post(
+          "/api/activity/create_activity",
+          { ...form },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
   };
 
   const checkLike = (post) => {
@@ -229,15 +235,15 @@ const MainCard = ({ todo }) => {
                         fontWeight: 400,
                         fontSize: "14px",
                         alignItems: "center",
-                        
                       }}
                     >
                       {todo.count_watch}
 
-                      <VisibilityIcon sx={{
-                        ml: 1,
-
-                      }} />
+                      <VisibilityIcon
+                        sx={{
+                          ml: 1,
+                        }}
+                      />
                     </Typography>
                   </Grid>
                   <Grid
@@ -264,9 +270,13 @@ const MainCard = ({ todo }) => {
                           color: "white",
                         }}
                       >
-                        <Link to={`/post/${todo.id}`} style={LinkStyle}>
-                          {todo.name}
-                        </Link>
+                        {userId === null ? (
+                          todo.name
+                        ) : (
+                          <Link to={`/post/${todo.id}`} style={LinkStyle}>
+                            {todo.name}
+                          </Link>
+                        )}
                       </Button>
                     </Typography>
                     <Grid
@@ -309,7 +319,25 @@ const MainCard = ({ todo }) => {
                       alignItems: "center",
                     }}
                   >
-                    <Avatar
+                    {userId === null ? (
+                      <Avatar
+                      component="a"
+                      variant="span"
+                     
+                      alt="logo"
+                      src={`${
+                        profile.find((item) => item.id === todo.user_id).avatar
+                      }`}
+                      sx={{
+                        display: "inline-block",
+                        width: 30,
+                        height: 30,
+                        mr: 1,
+                        ml: "10px",
+                      }}
+                    />
+                    ) : (
+                      <Avatar
                       component="a"
                       variant="span"
                       href={`/user/${todo.user_id}`}
@@ -325,6 +353,8 @@ const MainCard = ({ todo }) => {
                         ml: "10px",
                       }}
                     />
+                    )}
+                    
                     <Typography
                       noWrap
                       sx={{
@@ -334,6 +364,7 @@ const MainCard = ({ todo }) => {
                       }}
                     >
                       {
+                        
                         profile.find((item) => item.id === todo.user_id)
                           .nickname
                       }

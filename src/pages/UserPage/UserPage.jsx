@@ -50,6 +50,7 @@ import {
   HeadingLevel,
   AlignmentType,
 } from "docx";
+import { useHistory } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -446,7 +447,7 @@ function UserPage() {
     post.forEach((item) => (sumLike += item.count_like));
 
     let sumCom = 0;
-    post.forEach((item) => (sumCom += item.count_message));
+    post.forEach((item) => (sumCom += item.count_comments));
     try {
       const doc = new Document({
         sections: [
@@ -515,18 +516,21 @@ function UserPage() {
   post?.forEach((item) => (sumLike += item.count_like));
 
   let sumCom = 0;
-  post?.forEach((item) => (sumCom += item.count_message));
+  post?.forEach((item) => (sumCom += item.count_comments));
 
   console.log(subs);
 
   const [dialog, setDialog] = useState({
     user_from_id: userId,
-    user_to_id: window.location.pathname.slice(6)
+    user_to_id: window.location.pathname.slice(6),
   });
 
   const createDialog = async () => {
-    dialog.user_to_id = window.location.pathname.slice(6)
+    dialog.user_to_id = window.location.pathname.slice(6);
     try {
+      setTimeout(() => {
+        window.location.href = "/chat";
+      }, 2000);
       await axios.post(
         "/api/chat/create_dialog",
         { ...dialog },
@@ -590,6 +594,14 @@ function UserPage() {
                   Minheight: 80,
                   my: "5px",
                 }}
+              />
+              <input
+                type="file"
+                hidden
+                name="image"
+                id="file"
+                accept="image/gif , image/png , image/jpeg"
+                {...getInputProps()}
               />
               <Button
                 onClick={open}
@@ -955,15 +967,11 @@ function UserPage() {
                   aria-label="show new mails"
                   color="inherit"
                   sx={{ ml: 1 }}
-
-
                   onClick={() =>
                     setTimeout(() => {
-                      createDialog()
-                     
+                      createDialog();
                     }, 100)
                   }
-
                 >
                   <Badge badgeContent={0} color="secondary">
                     <MailIcon />
@@ -992,14 +1000,11 @@ function UserPage() {
                   aria-label="show new mails"
                   color="inherit"
                   sx={{ ml: 1 }}
-
                   onClick={() =>
                     setTimeout(() => {
-                      createDialog()
+                      createDialog();
                     }, 100)
                   }
-
-
                 >
                   <Badge badgeContent={0} color="secondary">
                     <MailIcon />

@@ -38,7 +38,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -61,5 +61,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://95.188.86.184:5000"
+  "proxy": "https://srv-kkrit.herokuapp.com/"
 }

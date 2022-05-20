@@ -166,7 +166,9 @@ function PostPage() {
     if (form.message.length > 140) {
       alert("Вы превысили ограничение по символам");
     } else {
-      console.log(form);
+      setTimeout(() => {
+        window.location.reload();
+      }, 300)
       axios.post(
         "/api/activity/create_message",
         { ...form },

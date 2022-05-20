@@ -105,41 +105,14 @@ function UserPage() {
     ? 
     (
        <>
-        <h1>1111</h1>
-        <h1>1111</h1>
-        <h1>1111</h1>
-        <h1>1111</h1>
-        <h1>1111</h1>
+      
        </>
     )
     : 
     (
        subs.length == 0 ?
        (<>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
-        <Typography sx={{ color: "white" }}>
-            LOH BEZ DRYZEI
-        </Typography>
+        
        </>) 
        
        : 
@@ -147,7 +120,7 @@ function UserPage() {
        (
         subs.map((item) => (
             <>
-                <h1>HUI</h1>
+            
               <Typography
                 sx={{
                   display: "flex",
@@ -163,7 +136,7 @@ function UserPage() {
                 )
                 ) : 
                 (
-                    <h1>Hui</h1>
+                    null
                 )}
               </Typography>
               <Typography

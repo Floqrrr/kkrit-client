@@ -149,7 +149,7 @@ function ChatPage() {
         sx={{
           ml: "260px",
           mt: "100px",
-          width: "1400px",
+          width: "1500px",
           height: "50px",
           flexDirection: "row",
           borderBottom: "1px solid #232326",
@@ -172,6 +172,7 @@ function ChatPage() {
                 color: "white",
                 width: "425px",
                 mt: "15px",
+                
                 textAlign: "center",
               }}
             >
@@ -218,7 +219,7 @@ function ChatPage() {
           width: "1400px",
           position: "absolute",
           right: "auto",
-          left: "50%",
+          ml: "260px"
         }}
       >
         <Grid
@@ -270,6 +271,7 @@ function ChatPage() {
                     padding: "0 20px",
                     height: "auto",
                     flex: "0 1 55px",
+                    
                   }}
                 >
                   <Typography
