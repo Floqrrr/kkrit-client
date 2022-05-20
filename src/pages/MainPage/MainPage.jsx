@@ -25,7 +25,7 @@ function ImageGallery() {
   const getPost = useCallback(async () => {
     try {
       await axios
-        .get(`/api/post/get_post/${page * 20}`, {
+        .get(`/api/post/get_post/${page * 8}`, {
           headers: {
             "Content-Type": "application/json",
           },

@@ -272,26 +272,13 @@ function Header() {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  useEffect(() => {
-    fetch(`/api/auth/get_user_header/${userId}`)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setProfile(result);
-          setIsLoadedProfile(true);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  }, []);
 
   form.image = files;
 
   const trynow = async () => {
     let formData = new FormData();
 
-    files.map((item) => {
+    files?.map((item) => {
       formData.append("image", item);
     });
 
