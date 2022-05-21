@@ -54,19 +54,21 @@ const AuthPage = () => {
 
   const registerHandler = async () => {
     try {
-      setTimeout(() => {
-        window.location.href = '/auth';
-      }, 2000);
-      await axios.post(
-        "/api/auth/registration",
-        { ...form },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      
+      await axios
+        .post(
+          "/api/auth/registration",
+          { ...form },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          setTimeout(() => {
+            window.location.href = "/auth";
+          }, 2000);
+        });
     } catch (errors) {
       if (errors.message === "Request failed with status code 300") {
         handleClick();

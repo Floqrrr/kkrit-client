@@ -366,13 +366,12 @@ function UserPage() {
   };
 
   const [sub, setSub] = useState({
-    user_id_sub: `${userId}`,
-    user_id: window.location.pathname.slice(6),
+    subscribes_id: `${userId}`,
+    subscribes_to: window.location.pathname.slice(6),
   });
 
   const createSubscribe = async () => {
     try {
-      console.log(sub);
       await axios.post(
         "/api/subscribes/create_subscribe",
         { ...sub },
@@ -382,6 +381,28 @@ function UserPage() {
           },
         }
       );
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const deleteSubscribe = async () => {
+    try {
+      await axios.post(
+        "/api/subscribes/delete_subscribes",
+        { ...sub },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     } catch (e) {
       console.log(e);
     }
@@ -517,8 +538,6 @@ function UserPage() {
 
   let sumCom = 0;
   post?.forEach((item) => (sumCom += item.count_comments));
-
-  console.log(subs);
 
   const [dialog, setDialog] = useState({
     user_from_id: userId,
@@ -752,18 +771,22 @@ function UserPage() {
                 mb: "12px",
               }}
             >
-              <Button
-                onClick={handleOpen}
-                sx={{
-                  color: "white",
-                  mt: 2,
-                  ".MuiSvgIcon-root": {
-                    color: "white",
-                  },
-                }}
-              >
-                <SettingsIcon />
-              </Button>
+              {profile?.map((item) =>
+                item.id === userId ? (
+                  <Button
+                    onClick={handleOpen}
+                    sx={{
+                      color: "white",
+                      mt: 2,
+                      ".MuiSvgIcon-root": {
+                        color: "white",
+                      },
+                    }}
+                  >
+                    <SettingsIcon />
+                  </Button>
+                ) : null
+              )}
             </Grid>
           </Grid>
           <Grid container sx={{ my: "5px" }}>
@@ -863,7 +886,11 @@ function UserPage() {
                   cursor: "pointer",
                 }}
               >
-                <DownloadIcon to="" onClick={() => createStatic()} />
+                {profile?.map((item) =>
+                  item.id === userId ? (
+                    <DownloadIcon to="" onClick={() => createStatic()} />
+                  ) : null
+                )}
               </Typography>
             </Grid>
           </Grid>
@@ -954,13 +981,13 @@ function UserPage() {
                 <Button
                   onClick={createSubscribe}
                   sx={{
-                    backgroundColor: "#1e681e",
-                    color: "white",
+                    backgroundColor: "#f0f0f0",
+                    color: "black",
                     mt: 2,
                   }}
                 >
                   <AddIcon />
-                  Подписаться1
+                  Подписаться
                 </Button>
                 <IconButton
                   size="large"
@@ -980,21 +1007,30 @@ function UserPage() {
               </>
             ) : (
               <>
-                <Button
-                  onClick={createSubscribe}
-                  sx={{
-                    backgroundColor: "#1e681e",
-                    color: "white",
-                    mt: 2,
-                  }}
-                >
-                  <AddIcon />
-                  {subs?.find((sbs) => sbs.subscribes_id == userId) ? (
-                    <h5>Otpis</h5>
-                  ) : (
-                    <h5>Podpis</h5>
-                  )}
-                </Button>
+                {subs?.find((sbs) => sbs.subscribes_id == userId) ? (
+                  <Button
+                    onClick={deleteSubscribe}
+                    sx={{
+                      backgroundColor: "#adadad",
+                      color: "black",
+                      mt: 2,
+                    }}
+                  >
+                    Отписаться
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={createSubscribe}
+                    sx={{
+                      backgroundColor: "#f0f0f0",
+                      color: "black",
+                      mt: 2,
+                    }}
+                  >
+                    <AddIcon />
+                    Подписаться
+                  </Button>
+                )}
                 <IconButton
                   size="large"
                   aria-label="show new mails"

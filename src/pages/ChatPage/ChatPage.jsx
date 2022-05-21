@@ -122,6 +122,11 @@ function ChatPage() {
     console.log(form);
   };
 
+  const changeHandlerClear = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
+    console.log(form);
+  };
+
   const sendMessage = async () => {
     form.dialog_id = room;
     form.user_to_id = dialog.find((item) => item.id === room).user_to_id;

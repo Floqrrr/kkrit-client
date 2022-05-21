@@ -53,7 +53,7 @@ const ResetPassword = () => {
   const resetPass = async () => {
     try {
       setTimeout(() => {
-        window.location.href = '/';
+        window.location.href = "/";
       }, 2000);
       await axios.post(
         "/api/auth/reset_pass",
@@ -118,21 +118,22 @@ const ResetPassword = () => {
   };
 
   const resetHandler = async () => {
-
     try {
-      setTimeout(() => {
-        window.location.href = '/auth';
-      }, 2000);
-      await axios.put(
-        "/api/auth/resetPass",
-        { ...form },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
+      await axios
+        .put(
+          "/api/auth/resetPass",
+          { ...form },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          setTimeout(() => {
+            window.location.href = "/auth";
+          }, 2000);
+        });
     } catch (error) {
       console.log(error);
     }

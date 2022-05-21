@@ -295,8 +295,6 @@ function Header() {
       formData.append("image", item);
     });
 
-    console.log(form)
-
     if (form.name === "") {
       handleClickAlertFalseName();
     } else
@@ -714,7 +712,7 @@ function Header() {
                 >
                   <Avatar
                     alt=""
-                    src={`${profile.map((item) => item.avatar)}`}
+                    src={`${profile?.map((item) => item.avatar)}`}
                     sx={{ width: 40, height: 40, ml: 1 }}
                   />
                 </IconButton>

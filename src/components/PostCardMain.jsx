@@ -141,19 +141,19 @@ const MainCard = ({ todo }) => {
     if (userId === null) {
       return;
     } else
-    try {
-      axios.put(
-        "/api/activity/update_activity",
-        { ...form },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
+      try {
+        axios.put(
+          "/api/activity/update_activity",
+          { ...form },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
   };
 
   const createWatch = async () => {
@@ -176,7 +176,9 @@ const MainCard = ({ todo }) => {
   };
 
   const checkLike = (post) => {
-    let pst = activity.find((i) => i.post_id === post);
+    let pst = activity?.find((i) => i.post_id === post);
+
+    console.log(pst)
 
     if (pst.like === 1) {
       form.like = -1;
@@ -203,7 +205,29 @@ const MainCard = ({ todo }) => {
   };
 
   return !isLoaded ? (
-    <CircularProgress variant="determinate" value={progress} />
+    <Grid mt={6}>
+      <Container sx={{ maxWidth: "300px", height: "auto" }}>
+        <Card sx={{ position: "relative" }}>
+          <Box
+            a
+            sx={{
+              objectFit: "cover",
+              height: "300px",
+              display: "block",
+              maxWidth: 300,
+              width: "228px",
+              overflow: "hidden",
+            }}
+          >
+            <CircularProgress
+              sx={{ ml: 12, mt: 15 }}
+              variant="determinate"
+              value={progress}
+            />
+          </Box>
+        </Card>
+      </Container>
+    </Grid>
   ) : (
     <Grid mt={6}>
       <Container sx={{ maxWidth: "300px", height: "auto" }}>
@@ -321,40 +345,41 @@ const MainCard = ({ todo }) => {
                   >
                     {userId === null ? (
                       <Avatar
-                      component="a"
-                      variant="span"
-                     
-                      alt="logo"
-                      src={`${
-                        profile.find((item) => item.id === todo.user_id).avatar
-                      }`}
-                      sx={{
-                        display: "inline-block",
-                        width: 30,
-                        height: 30,
-                        mr: 1,
-                        ml: "10px",
-                      }}
-                    />
+                        component="a"
+                        variant="span"
+                        alt="logo"
+                        src={`${
+                          profile.find((item) => item.id === todo.user_id)
+                            .avatar
+                        }`}
+                        sx={{
+                          display: "inline-block",
+                          width: 30,
+                          height: 30,
+                          mr: 1,
+                          ml: "10px",
+                        }}
+                      />
                     ) : (
                       <Avatar
-                      component="a"
-                      variant="span"
-                      href={`/user/${todo.user_id}`}
-                      alt="logo"
-                      src={`${
-                        profile.find((item) => item.id === todo.user_id).avatar
-                      }`}
-                      sx={{
-                        display: "inline-block",
-                        width: 30,
-                        height: 30,
-                        mr: 1,
-                        ml: "10px",
-                      }}
-                    />
+                        component="a"
+                        variant="span"
+                        href={`/user/${todo.user_id}`}
+                        alt="logo"
+                        src={`${
+                          profile.find((item) => item.id === todo.user_id)
+                            .avatar
+                        }`}
+                        sx={{
+                          display: "inline-block",
+                          width: 30,
+                          height: 30,
+                          mr: 1,
+                          ml: "10px",
+                        }}
+                      />
                     )}
-                    
+
                     <Typography
                       noWrap
                       sx={{
@@ -364,7 +389,6 @@ const MainCard = ({ todo }) => {
                       }}
                     >
                       {
-                        
                         profile.find((item) => item.id === todo.user_id)
                           .nickname
                       }

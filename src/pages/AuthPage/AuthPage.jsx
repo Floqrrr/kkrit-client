@@ -54,9 +54,6 @@ const AuthPage = () => {
 
   const registerHandler = async () => {
     try {
-      setTimeout(() => {
-        window.location.href = '/auth';
-      }, 2000);
       await axios.post(
         "/api/auth/registration",
         { ...form },
@@ -66,7 +63,7 @@ const AuthPage = () => {
           },
         }
       );
-    
+      
     } catch (error) {
       console.log(error);
     }
@@ -76,9 +73,6 @@ const AuthPage = () => {
 
   const loginHandler = async () => {
     try {
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 2000)
       await axios
         .post(
           "/api/auth/login",
@@ -91,6 +85,9 @@ const AuthPage = () => {
         )
         .then((response) => {
           login(response.data.token, response.data.userId);
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2000)
         });
     } catch (error) {
       visual = true;
