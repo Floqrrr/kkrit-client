@@ -15,7 +15,6 @@ import {
   Grid,
   FormControl,
   Select,
-  styled,
   CircularProgress,
   ImageList,
   ImageListItem,
