@@ -17,25 +17,32 @@ import {
   Select,
   CircularProgress,
   ImageList,
+  IconButton,
+  styled,
   ImageListItem,
   FormGroup,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import GifBoxIcon from "@mui/icons-material/GifBox";
-import bgImage from "../../post_bg.svg";
 import axios from "axios";
 import Message from "../../components/Message";
-
+import { useDropzone } from "react-dropzone";
+import { saveAs } from "file-saver";
 import { AuthContext } from "../../context/AuthContext";
-import dateFormat, { masks } from "dateformat";
+import CloseIcon from "@mui/icons-material/Close";
+
+const ICButton = styled(
+  IconButton,
+  CloseIcon
+)(({ theme }) => ({
+  "&:hover": {
+    CloseIcon: {
+      display: "block",
+    },
+  },
+}));
 
 function ChatPage() {
   const [value, setValue] = React.useState("");
-
+  const [files, setFiles] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
   const [room, setRoom] = useState(0);
@@ -46,6 +53,43 @@ function ChatPage() {
   const [usersId, setUsersId] = useState(0);
 
   const { userId } = useContext(AuthContext);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    setFiles(
+      acceptedFiles?.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
+      )
+    );
+  }, []);
+
+  const {
+    getRootProps,
+    getInputProps,
+    open,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    onDrop
+  });
+
+  const [img, setImg] = React.useState("");
+
+  const handleChange = (event) => {
+    setImg(event.target.value);
+  };
+
+  const RemoD = (file) => {
+    const newFiles = [...files];
+    newFiles.splice(newFiles.indexOf(file), 1);
+    setFiles(newFiles); // update the state
+  };
+
+  const Clear = () => {
+    setFiles([]); // update the state
+  };
 
   const getDialog = useCallback(async () => {
     try {
@@ -129,19 +173,52 @@ function ChatPage() {
   const sendMessage = async () => {
     form.dialog_id = room;
     form.user_to_id = dialog.find((item) => item.id === room).user_to_id;
+
+    if (files.length === 0) {
+      try {
+        await axios.post(
+          "/api/chat/create_message",
+          { ...form },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    } else createImage();
+  };
+
+  const createImage = async () => {
+    let formData = new FormData();
+
+    files?.map((item) => {
+      formData.append("image", item);
+      formData.append("id", userId);
+    });
+
+    formData.append("dialog_id", room);
+    formData.append(
+      "user_to_id",
+      dialog.find((item) => item.id === room).user_to_id
+    );
+    formData.append("user_from_id", userId);
+    formData.append("message", form.message);
     try {
-      await axios.post(
-        "/api/chat/create_message",
-        { ...form },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
+      console.log(files);
+      axios.post(`/api/chat/create_message_and_image`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      Clear();
+    } catch (e) {
+      console.log(e);
     }
+
+    console.log(formData);
   };
 
   return !isLoaded ? (
@@ -176,7 +253,7 @@ function ChatPage() {
                 color: "white",
                 width: "425px",
                 mt: "15px",
-                
+
                 textAlign: "center",
               }}
             >
@@ -223,7 +300,7 @@ function ChatPage() {
           width: "1400px",
           position: "absolute",
           right: "auto",
-          ml: "260px"
+          ml: "260px",
         }}
       >
         <Grid
@@ -275,7 +352,6 @@ function ChatPage() {
                     padding: "0 20px",
                     height: "auto",
                     flex: "0 1 55px",
-                    
                   }}
                 >
                   <Typography
@@ -318,6 +394,41 @@ function ChatPage() {
                     justifyContent: "center",
                   }}
                 >
+                  {files.map((file) => (
+                    <Grid
+                      key={file.path}
+                      item
+                      sx={{ width: "max-content", mr: "7px", mb: 1 }}
+                    >
+                      <img width={50} height={50} src={file.preview} />
+
+                      <ICButton
+                        onClick={() => RemoD(file)}
+                        sx={{ p: 0, ml: "-12px", mt: "-90px" }}
+                      >
+                        <CloseIcon
+                          sx={{ fill: "red", verticalAlign: "middle" }}
+                        />
+                      </ICButton>
+                    </Grid>
+                  ))}
+                  <input
+                    type="file"
+                    hidden
+                    name="image"
+                    id="file"
+                    accept="image/gif , image/png , image/jpeg"
+                    {...getInputProps()}
+                  />
+                  <Button
+                    variant="contained"
+                    component="span"
+                    rows={1}
+                    onClick={open}
+                  >
+                    Прикрепить
+                  </Button>
+                  
                   <TextField
                     multiline
                     rows={1}
@@ -346,7 +457,6 @@ function ChatPage() {
                       },
                     }}
                   />
-
                   <Button
                     variant="contained"
                     component="span"

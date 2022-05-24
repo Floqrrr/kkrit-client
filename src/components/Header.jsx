@@ -241,7 +241,7 @@ function Header() {
     type: "image",
     noClick: true,
     noKeyboard: true,
-    accept: "image/jpeg, image/png",
+    accept: "image/jpeg, image/png, image/gif",
   });
 
   const style = useMemo(

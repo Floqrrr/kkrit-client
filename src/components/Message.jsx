@@ -40,7 +40,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@mui/icons-material/Upload";
 import { Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
-
+import { saveAs } from "file-saver";
 
 const Message = ({ todo }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -72,20 +72,91 @@ const Message = ({ todo }) => {
     getPost(todo);
   }, [message]);
 
+  const SaveDocument = (todo) => {
+    console.log(todo)
+    saveAs("./test.png", "example.png");
+  };
+
   return (
     <Grid item>
       {message?.map((item) =>
-        item.dialog_id === todo ? (item.user_from_id === userId ? 
-          <Box sx={{width:'auto', display:'flex', justifyContent:"flex-end", my: 1}}>
-            <Typography sx={{color: "white", textAlign:"right", width:"fit-content", backgroundColor:'#7D90CD', mr: 3, p: "10px", borderRadius: "15px"}}>{item.message}</Typography> 
-          </Box>
-        
-        : 
-        <Box sx={{width:'auto', display:'flex', justifyContent:"flex-start", my: 1}}>
-            <Typography sx={{color: "white", textAlign:"left", ml: 3, backgroundColor:'#71788D', p: "10px", borderRadius: "15px"}}>{item.message}</Typography>
-          </Box>
-        
-        ): null
+        item.dialog_id === todo ? (
+          item.user_from_id === userId ? (
+            <Box
+              sx={{
+                width: "auto",
+                display: "flex",
+                justifyContent: "flex-end",
+                my: 1,
+              }}
+            >
+              {item.img != null ? (
+                <>
+                  <Box
+                    component="img"
+                    a
+                    sx={{
+                      objectFit: "cover",
+                      height: "300px",
+                      display: "block",
+                      maxWidth: 300,
+                      width: "228px",
+                      overflow: "hidden",
+                      color: "white",
+                      backgroundColor: "#7D90CD",
+                    }}
+                    src={`${item.img}?fit=cover&auto=format`}
+                    alt={item.label}
+                  ></Box>
+                  <h4>{item.img}</h4>
+                  <Button
+                    sx={{
+                      color: "black",
+                    }}
+                    onClick={() => SaveDocument(item.img)}
+                  >
+                    save
+                  </Button>
+                </>
+              ) : null}
+              <Typography
+                sx={{
+                  color: "white",
+                  textAlign: "right",
+                  width: "fit-content",
+                  backgroundColor: "#7D90CD",
+                  mr: 3,
+                  p: "10px",
+                  borderRadius: "15px",
+                }}
+              >
+                {item.message}
+              </Typography>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                width: "auto",
+                display: "flex",
+                justifyContent: "flex-start",
+                my: 1,
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "white",
+                  textAlign: "left",
+                  ml: 3,
+                  backgroundColor: "#71788D",
+                  p: "10px",
+                  borderRadius: "15px",
+                }}
+              >
+                {item.message}
+              </Typography>
+            </Box>
+          )
+        ) : null
       )}
     </Grid>
   );
